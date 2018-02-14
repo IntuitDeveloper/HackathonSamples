@@ -29,7 +29,7 @@ In order to successfully run this sample app you need a few things:
 Once the sample app code is on your computer, you can do the following steps to run the app:
 
 1. Open the solution in Visual Studio. This app was developed and tested on VS2017.
-2. Put a breakpoint in the methods for calling QBO entities in Page_Load method.
+2. Put a breakpoint in Page_Load method to see the full API response.
 3. Run the application 
 
 The sample app demonstrates the following flows:
