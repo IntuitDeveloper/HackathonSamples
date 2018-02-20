@@ -20,7 +20,8 @@ In order to successfully run this sample app you need a few things:
 ## First Use Instructions
 
 1. Clone the GitHub repo to your computer
-2. Provide your Access Token, RealmID, and environment(sandbox/production) in the [`SampleInvoiceCreateAPICall`](https://github.com/IntuitDeveloper/HackathonSamples/blob/master/php/SampleInvoiceCreateAPICall.php) file $settings array
+2. Use the [Oauth playground](https://developer.intuit.com/v2/ui#/playground)
+3. Provide your Access Token and RealmID from playground, and environment(sandbox/production) in the [`SampleInvoiceCreateAPICall.php`](https://github.com/IntuitDeveloper/HackathonSamples/blob/master/php/SampleInvoiceCreateAPICall.php) file $settings array
 
 
 ## Running the code
@@ -30,14 +31,3 @@ Once the sample app code is on your computer, you can do the following steps to 
 php SampleInvoiceCreateAPICall.php
 
 
-The sample app demonstrates the following flows:
-
-**QBO CompanyInfo GET API** - this flow shows how to make a QBO API Get request using SDK to fetch Company Information.
-
-**QBO Create Customer POST API** - this flow shows how to make a QBO API Post request using SDK to create a customer.
-
-**Handle expired tokens** - Both the API calls above demonstrates how to refresh the token when token expires.
-
-
-## Storing the tokens
-This app stores all the tokens and user information in the session. For production ready app, tokens should be encrypted and stored in a database.
