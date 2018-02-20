@@ -7,7 +7,6 @@ The [Intuit Developer team](https://developer.intuit.com) has written this OAuth
 * [Requirements](#requirements)
 * [First Use Instructions](#first-use-instructions)
 * [Running the code](#running-the-code)
-* [Storing the Tokens](#storing-the-tokens)
 
 
 ## Requirements
@@ -21,7 +20,7 @@ In order to successfully run this sample app you need a few things:
 ## First Use Instructions
 
 1. Clone the GitHub repo to your computer
-2. Provide your Access Token, RealmID, and environment(sandbox/production) in the [`SampleInvoiceCreateAPICall`](src/main/resources/application.properties) file $settings array
+2. Provide your Access Token, RealmID, and environment(sandbox/production) in the [`SampleInvoiceCreateAPICall`](https://github.com/IntuitDeveloper/HackathonSamples/blob/master/php/SampleInvoiceCreateAPICall.php) file $settings array
 
 
 ## Running the code
