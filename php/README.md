@@ -15,7 +15,7 @@ In order to successfully run this sample app you need a few things:
 
 1. PHP 5.4 or above
 2. A [developer.intuit.com](http://developer.intuit.com) account
-3. An app on [developer.intuit.com](http://developer.intuit.com) and the associated client id and client secret.
+3. An app on [developer.intuit.com](http://developer.intuit.com) 
 
 ## First Use Instructions
 
