@@ -20,7 +20,7 @@ In order to successfully run this sample app you need a few things:
 ## First Use Instructions
 
 1. Clone the GitHub repo to your computer
-2. Use the [Oauth playground](https://developer.intuit.com/v2/ui#/playground)
+2. Use the [Oauth playground](https://developer.intuit.com/v2/ui#/playground) to generate OAuth 2 tokens
 3. Provide your Access Token and RealmID from playground, and environment(sandbox/production) in the [`SampleInvoiceCreateAPICall.php`](https://github.com/IntuitDeveloper/HackathonSamples/blob/master/php/SampleInvoiceCreateAPICall.php) file $settings array
 
 
