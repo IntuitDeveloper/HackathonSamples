@@ -8,6 +8,7 @@ The [Intuit Developer team](https://developer.intuit.com) has written this OAuth
 2. ```cd``` into Node_OAuth2sample_hackathon folder
 3. Open quickbooks_simple.js and enter the access token and realmId you got from [OAuth2 Playground](https://developer.intuit.com/v2/ui#/playground)
 4. From terminal, enter ```npm install``` and then ```npm start```
+5. From any browser go to [http://localhost:3002/getCall](http://localhost:3002/getCall) and [http://localhost:3002/postCall](http://localhost:3002/postCall) to see API response
 
 ### Sample details
 
