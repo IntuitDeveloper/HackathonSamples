@@ -1,45 +1,94 @@
 const express = require ('express');
-const axios = require('axios');
-
-
+var session = require('express-session');
+//const debug = require('debug')('expressdebug:server')
+const QBORequests = require('./QBORequests');
+const OAuth2Helper = require('./OAuth2Helper');
+const config = require('./config');
 const app = express();
+const request = require('request');
 
-app.get('/', function(req,resp){
-  const quickbooks_sandbox_baseurl = 'https://sandbox-quickbooks.api.intuit.com';
-  const url = quickbooks_sandbox_baseurl + '/v3/company/193514538214074/companyinfo/193514538214074';
-	const config = {
-		headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..4TQwFBnbjoC8p9rz1CH52Q.wchk72SkwV0HTsOVO_c-oQYbC1EXcSed31DeJklcpnZ7-wGZ5IDeSKvlJZHdKvJB2t6OHOY_ZA7wck4Zbk40t4Z_UDp27J28kbA0KC-HacEN--pr2qiY7WlFKtBcrnYGpxDTUIA_cMDRu065Yy2vs8ebMiYqSy4ezZPpnb6hwlMqeF05Q6PLcMQC5xrto29M9yPKP9tJcRt4d7HM4AVED4dNG9-WnZEYk2cB2VXATxRENpFpWtee-eoy68e2WcLFlxX6xs6Odpuy2pN50mXOb5hzvmbSVc9zopSz4q0I0e_UQmLuXbvI2K_Skg1VTjI-CeWeHZo-3FlDtDyrsmPbo1lWh9S0F66r29F2JjES8v4UfxLlz457kRwTwXgmIiq2gxtJh52SV3Iqa9ST9EzD7510FCxp4FUIOTVgyL9_ZWSI8Y3O01g7HNwUtkd1pntZslvkVMLxlc8nI5COSENAmv_9kHfuxmTPYBw1F7LF-BTgBLGKBn_tYbFP37KgX0TosPIwwu0VGaA8QMyS_rVZdqo28wbcVfrjtcuNHsrEgWALljptsTVzbPuWfTT7WDQgtDaKXkoD-z40gHciMJg4nUCebbW6LiZmjA3aeHGV4b8h8R_UKb97C1PFtOUBEKP8Y_hVF5yWVP_okHvUWD4oEZWkcOP650s1PUYD9pKv9clz_7bvHrdvIcBeTErwhHD_.duhOr6TnD5XwNOqA2KPiSw'
-		}
-	}
+app.use(session({
+	resave: false,
+    saveUninitialized: true,
+	secret: 'secret',
+}))
 
-	// Refer to Customer and other enitity documentation here: https://developer.intuit.com/docs/api/accounting/customer
-	const body = {
-				    "BillAddr": {
-				        "Line1": "123 Main Street",
-				        "City": "Mountain View",
-				        "Country": "USA",
-				        "CountrySubDivisionCode": "CA",
-				        "PostalCode": "94042"
-				    },
-				    "Notes": "Here are other details.",
-				    "DisplayName": "King's Groceries1",
-				    "PrimaryPhone": {
-				        "FreeFormNumber": "(555) 555-5555"
-				    },
-				    "PrimaryEmailAddr": {
-				        "Address": "jdrew@myemail.com"
-				    }
-		};
-    axios.get(url, config).then( function (response) {
-      resp.send(JSON.stringify(response.data));
-	  }).catch(function (error) {
-    	console.log(error);
-	  });
+app.use(function (req, res, next) {
+  if (!req.session.accessToken) {
+    req.session.accessToken = config.AccessToken
+  }
+  if (!req.session.refreshToken) {
+    req.session.refreshToken = config.RefreshToken
+  }
+  if (!req.session.realmId) {
+    req.session.realmId = config.RealmId
+  }
+  next()
 })
 
-app.listen(3000, () => {
-    console.log('Running Express.js on port 3000.');
+app.get('/', function(req, resp){
+	resp.send('Route to /getCall and /postCall to see result');
+})
+
+app.get('/getCall', function(req, resp){
+
+	QBORequests.getCompanyInfo(req.session.accessToken, req.session.realmId, function(apiResponse) {
+		if(JSON.parse(apiResponse.statusCode) === 401) {
+			OAuth2Helper.refreshAccessToken(req.session.refreshToken, function(tokenResp){
+				if(tokenResp != null) {
+					req.session.refreshToken = tokenResp.refresh_token;
+					req.session.accessToken = tokenResp.access_token;
+					QBORequests.getCompanyInfo(req.session.accessToken, req.session.realmId, function(apiResponseRetry) {	
+						console.log('After 401: ' + JSON.stringify(apiResponseRetry.body));
+						resp.send(JSON.stringify(apiResponseRetry.body));
+					});
+				}
+				else {
+					console.log('Refreshing access token failure.');
+				}
+			});
+		}
+		else if(JSON.parse(apiResponse.statusCode) === 200) {
+			console.log('Successful response '+ JSON.stringify(apiResponse.body));
+			resp.send(JSON.stringify(apiResponse.body));
+		}
+		else {
+			console.log('Something went wrong. Here\'s the full response: ' + JSON.stringify(apiResponse));
+			resp.send(JSON.stringify(apiResponse.body));
+		}
+
+	});
+})
+
+app.get('/postCall', function(req, resp){
+	QBORequests.createCustomer(req.session.accessToken, req.session.realmId, function(apiResponse) {
+		if(JSON.parse(apiResponse.statusCode) === 401) {
+			OAuth2Helper.refreshAccessToken(req.session.refreshToken, function(tokenResp){
+				if(tokenResp != null) {
+					req.session.refreshToken = tokenResp.refresh_token;
+					req.session.accessToken = tokenResp.access_token;
+					QBORequests.createCustomer(req.session.accessToken, req.session.realmId, function(apiResponseRetry) {	
+						console.log('After 401: ' + JSON.stringify(apiResponseRetry.body));
+						resp.send(JSON.stringify(apiResponseRetry.body));
+					});
+				}
+				else {
+					console.log('Refreshing access token failure.');
+				}
+			});
+		}
+		else if(JSON.parse(apiResponse.statusCode) === 200) {
+			console.log('Successful response '+ JSON.stringify(apiResponse.body));
+			resp.send(JSON.stringify(apiResponse.body));
+		}
+		else {
+			console.log('Something went wrong. Here\'s the full response: ' + JSON.stringify(apiResponse));
+			resp.send(JSON.stringify(apiResponse.body));
+		}
+
+	});
+})
+
+app.listen(3002, () => {
+    console.log('Running Express.js on port 3002.');
 });
