@@ -1,3 +1,5 @@
+[![Sample Banner](views/Sample.png)][ss1]
+
 # HackathonSamples
 
 The [Intuit Developer team](https://developer.intuit.com) has written these samples to demonstrate how to use the OAuth2 tokens generated using OAuth Playground to call QuickBooks API.
@@ -18,3 +20,5 @@ Samples are available in the following languages, use the readme within the indi
 * [Nodejs](nodejs)
 * [PHP](php)
 * [Python](python)
+
+[ss1]: https://help.developer.intuit.com/s/samplefeedback?cid=9010&repoName=HackathonSamples
