@@ -1,4 +1,4 @@
-[![Sample Banner](views/Sample.png)][ss1]
+[![Rate your Sample](views/Ratesample.png)][ss1][![Yes](views/Thumbup.png)][ss2][![No](views/Thumbdown.png)][ss3]
 
 # HackathonSamples
 
@@ -21,4 +21,6 @@ Samples are available in the following languages, use the readme within the indi
 * [PHP](php)
 * [Python](python)
 
-[ss1]: https://help.developer.intuit.com/s/samplefeedback?cid=9010&repoName=HackathonSamples
+[ss1]: #
+[ss2]: https://customersurveys.intuit.com/jfe/form/SV_9LWgJBcyy3NAwHc?check=Yes&checkpoint=HackathonSamples&pageUrl=github
+[ss3]: https://customersurveys.intuit.com/jfe/form/SV_9LWgJBcyy3NAwHc?check=No&checkpoint=HackathonSamples&pageUrl=github
